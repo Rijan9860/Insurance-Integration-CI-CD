@@ -43,8 +43,4 @@ jobs:
         run: docker rm insurance-integration || true
 
       - name: Start new container
-        run: |
-          docker run -d \
-            --name insurance-integration \
-            -p 8092:8092 \
-            rijan17/insurance-integration-cicd:latest
+        run: docker compose up -d insurance-integration
