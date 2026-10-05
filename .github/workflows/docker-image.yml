@@ -35,15 +35,16 @@ jobs:
       - name: Pull latest docker image
         run: |
           cd /home/rijan/bahmni-docker/bahmni-standard
-          docker pull rijan17/insurance-integration-cicd:latest
           docker compose pull insurance-integration
           docker compose up -d insurance-integration
+
+      - name: Clean unused Docker images
+        run: |
+          docker images "rijan17/insurance-integration-cicd" \
+          --filter "dangling=true" \
+          -q | xargs -r docker rmi
 
       - name: Verify deployment
         run: |
           docker ps --filter "name=insurance-integration"
-
-      - name: Show logs
-        run: |
-          docker logs --tail 100 insurance-integration
      
