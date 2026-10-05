@@ -34,13 +34,16 @@ jobs:
     steps:
       - name: Pull latest docker image
         run: |
+          cd /home/rijan/bahmni-docker/bahmni-standard
           docker pull rijan17/insurance-integration-cicd:latest
+          docker compose pull insurance-integration
+          docker compose up -d insurance-integration
 
-      - name: Stop old container
-        run: docker stop insurance-integration || true
+      - name: Verify deployment
+        run: |
+          docker ps --filter "name=insurance-integration"
 
-      - name: Remove old container
-        run: docker rm insurance-integration || true
-
-      - name: Start new container
-        run: docker compose up -d insurance-integration
+      - name: Show logs
+        run: |
+          docker logs --tail 100 insurance-integration
+     
