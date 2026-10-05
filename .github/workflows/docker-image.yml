@@ -6,6 +6,7 @@ on:
 
   pull_request:
     branches: ["main"]
+    types: [closed]
 
 jobs:
 
@@ -28,11 +29,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
   deploy:
-    if: github.base_ref == 'main' && github.event_name == 'pull_request'
+    if: github.base_ref == 'main' && github.event_name == 'pull_request' && github.event.pull_request.merged == true
     runs-on: self-hosted
 
     steps:
-      - name: Pull latest docker image
+      - name: Pull and Deploy latest docker image
         run: |
           cd /home/rijan/bahmni-docker/bahmni-standard
           docker compose pull insurance-integration
